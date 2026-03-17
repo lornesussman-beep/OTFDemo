@@ -167,8 +167,81 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 @media(max-width:900px){.sidebar{display:none}.kpi-strip{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:700px){.workspace{flex-direction:column-reverse!important}.input-sidebar{width:100%;max-height:40vh;border-left:none;border-top:1px solid var(--border)}.content{padding:12px}.kpi-strip{grid-template-columns:1fr 1fr}.smart-cards{grid-template-columns:1fr}.detail-panel{width:100%}}
 </style>
+<style>
+/* LOGIN GATE */
+.login-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;width:360px;box-shadow:0 4px 24px rgba(0,0,0,0.08)}
+.login-box h2{font-size:20px;margin-bottom:6px;letter-spacing:-0.3px}
+.login-box p{color:var(--muted);font-size:13px;margin-bottom:24px}
+.login-box input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;margin-bottom:12px;outline:none}
+.login-box input:focus{border-color:var(--green)}
+.login-box button{width:100%;padding:10px;background:var(--green);color:#000;border:none;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;font-family:'Inter',sans-serif}
+.login-box button:hover{opacity:0.9}
+.login-error{color:var(--red);font-size:12px;margin-bottom:12px;display:none}
+.login-logout{position:fixed;top:12px;right:12px;z-index:9998;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:12px;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif}
+.login-logout:hover{color:var(--text)}
+</style>
 </head>
 <body>
+
+<!-- LOGIN GATE -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <div style="width:30px;height:30px;background:#13ec13;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#000">W</div>
+      <span style="font-weight:700;font-size:14px">Wealthsimple</span>
+    </div>
+    <h2>Sign in</h2>
+    <p>Enter your credentials to access this tool.</p>
+    <div class="login-error" id="loginError">Invalid username or password.</div>
+    <input type="text" id="loginUser" placeholder="Username" autocomplete="username">
+    <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password">
+    <button onclick="attemptLogin()">Sign in</button>
+  </div>
+</div>
+<button class="login-logout" id="logoutBtn" style="display:none" onclick="logout()">Sign out</button>
+
+<script>
+// USERS: Add or remove credentials here
+const AUTH_USERS = [
+  { user: 'lorne', pass: 'ws2026' },
+  { user: 'demo', pass: 'wealthsimple' }
+];
+
+function attemptLogin() {
+  const u = document.getElementById('loginUser').value.trim().toLowerCase();
+  const p = document.getElementById('loginPass').value;
+  const match = AUTH_USERS.find(a => a.user === u && a.pass === p);
+  if (match) {
+    localStorage.setItem('ws_auth', JSON.stringify({ user: u, ts: Date.now() }));
+    showApp();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('ws_auth');
+  location.reload();
+}
+
+function showApp() {
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('logoutBtn').style.display = 'block';
+}
+
+// Check existing session (expires after 30 days)
+(function() {
+  const auth = JSON.parse(localStorage.getItem('ws_auth') || 'null');
+  if (auth && (Date.now() - auth.ts) < 30 * 24 * 60 * 60 * 1000) {
+    showApp();
+  }
+  document.getElementById('loginPass').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') attemptLogin();
+  });
+})();
+</script>
+
 <div class="app">
 
 <aside class="sidebar">
