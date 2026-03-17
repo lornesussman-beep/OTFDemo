@@ -32,7 +32,7 @@ body{background:var(--bg);color:var(--text);font-family:'Jost','Futura PT',Futur
 .nav-item.active+.sc-desc{display:block}
 .ai-card{margin-top:auto;background:var(--accent-dim);border:1px solid rgba(235,170,130,.25);border-radius:11px;padding:12px}
 .ai-label{font-size:9px;color:var(--muted);margin-bottom:5px;font-weight:600}
-.ai-text{font-size:10px;color:#374151;line-height:1.5;font-style:italic}
+.ai-text{font-size:10px;color:#374151;line-height:1.5;font-style:italic;transition:opacity .15s}
 
 /* HEADER */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
@@ -250,11 +250,14 @@ function showApp() {
   <div class="sidebar-logo"><div class="logo-icon">W</div><div><span class="logo-text">Wealthsimple</span><div class="logo-sub">Wealth Management</div></div></div>
   <div class="sb-section">Scenarios</div>
   <div id="scenarioNav"></div>
-  <div class="ai-card" style="margin-top:auto"><div class="ai-label">Planning Insight</div><div class="ai-text" id="aiText">Adjust inputs to see your personalized projection.</div></div>
+  <div class="ai-card" style="margin-top:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><div class="ai-label">Planning Insight</div><button onclick="cycleAI()" style="background:none;border:1px solid rgba(235,170,130,.3);border-radius:5px;padding:2px 8px;font-size:9px;color:var(--accent);cursor:pointer;font-family:inherit;font-weight:500;transition:all .2s" onmouseover="this.style.background='rgba(235,170,130,.12)'" onmouseout="this.style.background='none'">Refresh</button></div>
+    <div class="ai-text" id="aiText">Adjust inputs to see your personalized projection.</div>
+  </div>
 </aside>
 
 <div class="main">
-  <div class="print-hdr"><h1 id="printName" style="font-family:'Playfair Display',serif;font-size:20px">Financial Plan</h1><div style="text-align:right;font-size:11px;color:var(--muted)"><div id="printDate"></div><div>Wealthsimple Wealth Management</div></div></div>
+  <div class="print-hdr"><h1 id="printName" style="font-family:'Jost','Futura PT',Futura,sans-serif;font-size:20px;font-weight:500">Financial Plan</h1><div style="text-align:right;font-size:11px;color:var(--muted)"><div id="printDate"></div><div>Wealthsimple Wealth Management</div></div></div>
   <header>
     <div class="header-left">
       <div><div class="header-label">Presentation for</div><div class="header-name" id="headerName">Your Client</div></div>
@@ -937,14 +940,32 @@ function renderModeling() {
 // ============================================================
 // AI TEXT
 // ============================================================
-function updateAI(r) {
+let aiInsights = [], aiIdx = 0;
+function buildInsights(r) {
   const surplus = r.income.total - r.spend;
-  let msg;
-  if(surplus<0) msg=`At ${fmt(r.spend)}/mo spending, there\u2019s a projected shortfall. Consider increasing contributions or adjusting the retirement timeline.`;
-  else if(r.retAccts.rrsp>500000) msg=`With ${fmtM(r.retAccts.rrsp)} in RRSP at retirement, strategic drawdown before CPP/OAS could save $150K+ in lifetime taxes.`;
-  else if(r.cpp<65) msg=`Delaying CPP to 70 adds ${fmt(calcCPP(r.yw,70)-calcCPP(r.yw,60))}/mo in guaranteed income \u2014 meaningful longevity hedge.`;
-  else msg=`Funds projected to last until age ${r.fundsTo>=95?'95+':r.fundsTo}. TFSA should hold highest-growth assets for tax-free compounding.`;
-  document.getElementById('aiText').textContent=msg;
+  const tips = [];
+  if(surplus<0) tips.push(`At ${fmt(r.spend)}/mo spending, there's a projected shortfall of ${fmt(Math.abs(surplus))}/mo. Consider increasing contributions or adjusting the retirement timeline.`);
+  if(r.retAccts.rrsp>400000) { const tb=rrspTaxBomb(r.retAccts.rrsp,r.retAge,r.ret,r.cpp); tips.push(`With ${fmtM(r.retAccts.rrsp)} in RRSP at retirement, strategic drawdown before CPP/OAS could save ~${fmtM(tb.saved)} in lifetime taxes.`); }
+  if(r.cpp<70) tips.push(`Delaying CPP to 70 adds ${fmt(calcCPP(r.yw,70)-calcCPP(r.yw,r.cpp))}/mo in guaranteed income. At 8.4%/yr growth, it's the best risk-free return available.`);
+  if(r.fees.annSav>0) tips.push(`Fee savings of ${fmt(r.fees.annSav)}/yr compound to ${fmtM(r.fees.lifeSav)} over your retirement. That's real money back in your portfolio.`);
+  if(r.implRate>4) tips.push(`Withdrawal rate at ${r.implRate.toFixed(1)}% exceeds the 4% guideline. Reducing spending by ${fmt(Math.round(r.income.drawdown-(r.portRet*.04/12)))}/mo would bring it to sustainable levels.`);
+  if(r.spend*12>OAS_THRESHOLD) tips.push(`Income of ${fmt(r.spend*12)}/yr triggers OAS clawback of ${fmt(r.oasCB.clawback)}/yr. Early RRSP drawdown can keep income under the $90,997 threshold.`);
+  if(r.inflation>0) { const future=Math.round(r.spend*Math.pow(1+r.inflation,20)); tips.push(`Inflation turns today's ${fmt(r.spend)}/mo into ${fmt(future)}/mo in 20 years. Maintaining growth exposure in retirement is essential.`); }
+  tips.push(`Funds projected to last until age ${r.fundsTo>=95?'95+':r.fundsTo}. TFSA should hold highest-growth assets for tax-free compounding.`);
+  if(surplus>=0&&r.fundsTo>=90) tips.push(`Strong position. There may be room to increase early retirement spending when you're most active, or build a legacy.`);
+  return tips;
+}
+function updateAI(r) {
+  aiInsights = buildInsights(r);
+  aiIdx = 0;
+  document.getElementById('aiText').textContent = aiInsights[0] || 'Adjust inputs to see your personalized projection.';
+}
+function cycleAI() {
+  if(aiInsights.length<=1) return;
+  aiIdx = (aiIdx+1) % aiInsights.length;
+  const el = document.getElementById('aiText');
+  el.style.opacity='0';
+  setTimeout(()=>{ el.textContent=aiInsights[aiIdx]; el.style.opacity='1'; },150);
 }
 
 // ============================================================
@@ -1073,7 +1094,8 @@ function resetDefaults() {
 // ============================================================
 // EVENT BINDING
 // ============================================================
-function schedR(){clearTimeout(debounceT);debounceT=setTimeout(recalculate,120);}
+let isRendering = false;
+function schedR(){clearTimeout(debounceT);debounceT=setTimeout(()=>{if(isRendering)return;isRendering=true;requestAnimationFrame(()=>{recalculate();isRendering=false;});},200);}
 function updateDisplays() {
   document.getElementById('caV').textContent=document.getElementById('currentAge').value;
   document.getElementById('raV').textContent=document.getElementById('retireAge').value;
