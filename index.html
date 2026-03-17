@@ -5,32 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wealth Management — On The Fly Demo</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--green:#13ec13;--green-dim:rgba(19,236,19,0.12);--bg:#f0f4f0;--surface:#fff;--border:#e2e8f0;--text:#1a2e1a;--muted:#64748b;--sidebar:#f8faf8;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--amber:#f59e0b}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;font-size:14px}
-.serif{font-family:'Playfair Display',serif;font-style:italic}
+:root{--green:#32302F;--green-dim:rgba(50,48,47,0.08);--bg:#FCFCFC;--surface:#FFFFFF;--border:#EEECE7;--text:#32302F;--muted:#7a7a7a;--sidebar:#FAF8F5;--red:#ef4444;--blue:#3b82f6;--purple:#DEC3F9;--amber:#EBAA82;--accent:#EBAA82;--accent-dim:rgba(235,170,130,0.12)}
+body{background:var(--bg);color:var(--text);font-family:'Jost','Futura PT',Futura,sans-serif;min-height:100vh;font-size:14px}
+.serif{font-family:'Jost','Futura PT',Futura,sans-serif;font-weight:300;font-style:normal}
 .app{display:flex;height:100vh;overflow:hidden}
 
 /* SIDEBAR */
 .sidebar{width:220px;flex-shrink:0;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 14px;overflow-y:auto}
 .sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
-.logo-icon{width:30px;height:30px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#000}
+.logo-icon{width:30px;height:30px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;color:#fff}
 .logo-text{font-weight:700;font-size:14px;letter-spacing:-0.3px}
 .logo-sub{font-size:9px;color:var(--muted);letter-spacing:0.5px;margin-top:1px}
 .sb-section{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin:20px 0 10px}
 .nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;margin-bottom:3px;transition:all .2s;user-select:none}
-.nav-item:hover{background:#f1f5f1}
-.nav-item.active{background:var(--green-dim);color:#0a6e0a;font-weight:600}
+.nav-item:hover{background:#F6F0E7}
+.nav-item.active{background:var(--accent-dim);color:#32302F;font-weight:600}
 .nav-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;border:2px solid #cbd5e1;transition:all .2s}
-.nav-item.active .nav-dot{background:var(--green);border-color:var(--green)}
+.nav-item.active .nav-dot{background:var(--accent);border-color:var(--accent)}
 .nav-item[data-s="crash"].active .nav-dot{background:var(--red);border-color:var(--red)}
 .nav-item[data-s="aggressive"].active .nav-dot{background:var(--blue);border-color:var(--blue)}
 .nav-item[data-s="legacy"].active .nav-dot{background:var(--purple);border-color:var(--purple)}
 .sc-desc{font-size:9px;color:var(--muted);margin:-1px 0 5px 28px;line-height:1.4;display:none}
 .nav-item.active+.sc-desc{display:block}
-.ai-card{margin-top:auto;background:var(--green-dim);border:1px solid rgba(19,236,19,.25);border-radius:11px;padding:12px}
+.ai-card{margin-top:auto;background:var(--accent-dim);border:1px solid rgba(235,170,130,.25);border-radius:11px;padding:12px}
 .ai-label{font-size:9px;color:var(--muted);margin-bottom:5px;font-weight:600}
 .ai-text{font-size:10px;color:#374151;line-height:1.5;font-style:italic}
 
@@ -39,15 +39,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 header{height:56px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .header-left{display:flex;align-items:center;gap:16px}
 .header-label{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:1px}
-.header-name{font-family:'Playfair Display',serif;font-size:15px}
+.header-name{font-family:'Jost','Futura PT',Futura,sans-serif;font-size:15px;font-weight:500}
 .header-divider{width:1px;height:26px;background:var(--border)}
-.header-amount{font-size:17px;font-weight:700;color:#0a9e0a;letter-spacing:-.5px}
+.header-amount{font-size:17px;font-weight:700;color:#32302F;letter-spacing:-.5px}
 .header-right{display:flex;align-items:center;gap:10px}
-.header-tabs{display:flex;background:#f1f5f1;border:1px solid var(--border);border-radius:999px;padding:2px;gap:2px}
+.header-tabs{display:flex;background:#F6F0E7;border:1px solid var(--border);border-radius:999px;padding:2px;gap:2px}
 .htab{padding:5px 14px;border-radius:999px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;color:var(--muted)}
-.htab.active{background:var(--green);color:#000}
+.htab.active{background:#32302F;color:#FCFCFC}
 .icon-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);transition:all .2s}
-.icon-btn:hover{border-color:rgba(19,236,19,.5);color:var(--text)}
+.icon-btn:hover{border-color:rgba(235,170,130,.5);color:var(--text)}
 
 /* CONTENT */
 .workspace{display:flex;flex:1;overflow:hidden}
@@ -56,10 +56,10 @@ header{height:56px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);b
 /* KPI STRIP */
 .kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s}
-.kpi:hover{border-color:rgba(19,236,19,.4);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.04)}
+.kpi:hover{border-color:rgba(235,170,130,.4);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.04)}
 .kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
 .kpi-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.kpi-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--green-dim);color:#0a6e0a}
+.kpi-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--accent-dim);color:#32302F}
 .kpi-badge.red{background:#fef2f2;color:#dc2626}
 .kpi-badge.gray{background:#f1f5f9;color:var(--muted)}
 .kpi-val{font-size:24px;font-weight:700;letter-spacing:-.8px;margin-bottom:4px}
@@ -76,14 +76,14 @@ header{height:56px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);b
 
 /* SMART CARDS */
 .smart-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
-.scard{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:13px 14px;cursor:pointer;transition:all .2s;border-left:3px solid var(--green)}
-.scard:hover{border-color:rgba(19,236,19,.4);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.05)}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:13px 14px;cursor:pointer;transition:all .2s;border-left:3px solid var(--accent)}
+.scard:hover{border-color:rgba(235,170,130,.4);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.05)}
 .scard.warning{border-left-color:var(--amber)}
 .scard.risk{border-left-color:var(--red)}
 .scard-title{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .scard-metric{font-size:18px;font-weight:700;margin-bottom:3px}
 .scard-detail{font-size:11px;color:var(--muted);line-height:1.4}
-.scard-link{font-size:10px;color:#0a6e0a;font-weight:600;margin-top:6px;display:block}
+.scard-link{font-size:10px;color:#32302F;font-weight:600;margin-top:6px;display:block}
 
 /* DETAIL PANEL */
 .panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0);pointer-events:none;transition:background .3s;z-index:100}
@@ -91,7 +91,7 @@ header{height:56px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);b
 .detail-panel{position:absolute;right:0;top:0;bottom:0;width:440px;background:var(--surface);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .3s ease;overflow-y:auto;box-shadow:-8px 0 24px rgba(0,0,0,.08)}
 .panel-overlay.open .detail-panel{transform:translateX(0)}
 .p-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surface);z-index:1}
-.p-header h3{font-family:'Playfair Display',serif;font-size:17px}
+.p-header h3{font-family:'Jost','Futura PT',Futura,sans-serif;font-size:17px;font-weight:500}
 .p-close{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
 .p-body{padding:20px}
 .p-stat{margin-bottom:14px}
@@ -100,15 +100,15 @@ header{height:56px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);b
 .p-stat-note{font-size:11px;color:var(--muted);margin-top:2px}
 .p-divider{border:none;border-top:1px solid var(--border);margin:14px 0}
 .p-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.p-box{background:#f8faf8;border:1px solid var(--border);border-radius:9px;padding:12px}
-.p-box.highlight{border-color:rgba(19,236,19,.5);background:var(--green-dim)}
+.p-box{background:#FAF8F5;border:1px solid var(--border);border-radius:9px;padding:12px}
+.p-box.highlight{border-color:rgba(235,170,130,.5);background:var(--accent-dim)}
 .p-box-label{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .p-box-val{font-size:18px;font-weight:700;margin-bottom:2px}
 .p-box-note{font-size:10px;color:var(--muted)}
 .p-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
 .p-row:last-child{border-bottom:none}
 .p-row-val{font-weight:700}
-.p-tip{background:var(--green-dim);border:1px solid rgba(19,236,19,.3);border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.5;margin-top:12px;color:#0a6e0a}
+.p-tip{background:var(--accent-dim);border:1px solid rgba(235,170,130,.3);border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.5;margin-top:12px;color:#32302F}
 .p-warn{background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.5;margin-top:12px;color:#92400e}
 
 /* MODELING */
@@ -128,27 +128,27 @@ header{height:56px;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);b
 .in-group{margin-bottom:10px}
 .in-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500;display:block}
 .range-row{display:flex;align-items:center;gap:8px}
-.range-val{font-size:12px;font-weight:700;color:#0a9e0a;min-width:38px;text-align:right}
-input[type=range]{width:100%;accent-color:var(--green);height:4px;cursor:pointer;background:#e2e8f0;border-radius:99px;appearance:none;-webkit-appearance:none;border:none;padding:0}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--green);cursor:pointer;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.15)}
-input[type=number],input[type=text]{background:#f8faf8;border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:7px;font-size:12px;width:100%;outline:none;transition:border-color .2s}
-input[type=number]:focus,input[type=text]:focus{border-color:rgba(19,236,19,.6)}
+.range-val{font-size:12px;font-weight:700;color:#32302F;min-width:38px;text-align:right}
+input[type=range]{width:100%;accent-color:var(--accent);height:4px;cursor:pointer;background:#EEECE7;border-radius:99px;appearance:none;-webkit-appearance:none;border:none;padding:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+input[type=number],input[type=text]{background:#FAF8F5;border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:7px;font-size:12px;width:100%;outline:none;transition:border-color .2s}
+input[type=number]:focus,input[type=text]:focus{border-color:rgba(235,170,130,.6)}
 .port-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px}
-.port-btn{background:#f8faf8;border:1px solid var(--border);color:var(--muted);padding:6px 3px;border-radius:7px;cursor:pointer;text-align:center;font-size:10px;font-weight:600;transition:all .2s}
-.port-btn.active{background:var(--green-dim);border-color:rgba(19,236,19,.5);color:#0a6e0a}
+.port-btn{background:#FAF8F5;border:1px solid var(--border);color:var(--muted);padding:6px 3px;border-radius:7px;cursor:pointer;text-align:center;font-size:10px;font-weight:600;transition:all .2s}
+.port-btn.active{background:var(--accent-dim);border-color:rgba(235,170,130,.5);color:#32302F}
 .risk-row{display:flex;gap:3px;flex-wrap:wrap;margin-top:6px}
-.risk-btn{background:#f8faf8;border:1px solid var(--border);color:var(--muted);padding:4px 8px;border-radius:5px;cursor:pointer;font-size:11px;font-weight:600;transition:all .2s}
-.risk-btn.active{background:var(--green-dim);border-color:rgba(19,236,19,.5);color:#0a6e0a}
+.risk-btn{background:#FAF8F5;border:1px solid var(--border);color:var(--muted);padding:4px 8px;border-radius:5px;cursor:pointer;font-size:11px;font-weight:600;transition:all .2s}
+.risk-btn.active{background:var(--accent-dim);border-color:rgba(235,170,130,.5);color:#32302F}
 .toggle-row{display:flex;gap:5px;margin-bottom:6px}
-.toggle-btn{flex:1;padding:6px;border-radius:6px;border:1px solid var(--border);background:#f8faf8;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
-.toggle-btn.active{background:var(--green-dim);border-color:rgba(19,236,19,.5);color:#0a6e0a}
+.toggle-btn{flex:1;padding:6px;border-radius:6px;border:1px solid var(--border);background:#FAF8F5;color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s}
+.toggle-btn.active{background:var(--accent-dim);border-color:rgba(235,170,130,.5);color:#32302F}
 hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .collapse-hdr{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:4px 0;font-size:9px;font-weight:700;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase;margin-top:16px;margin-bottom:6px}
 .collapse-arrow{font-size:11px;transition:transform .2s}
 .action-row{display:flex;gap:6px;margin-top:14px}
 .action-btn{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface);font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--muted);transition:all .2s}
-.action-btn:hover{border-color:rgba(19,236,19,.5);color:var(--text)}
-.action-btn.copied{background:var(--green-dim);border-color:rgba(19,236,19,.5);color:#0a6e0a}
+.action-btn:hover{border-color:rgba(235,170,130,.5);color:var(--text)}
+.action-btn.copied{background:var(--accent-dim);border-color:rgba(235,170,130,.5);color:#32302F}
 .reset-link{display:block;text-align:center;font-size:10px;color:var(--muted);cursor:pointer;margin-top:10px;text-decoration:underline}
 
 /* PRINT */
@@ -353,7 +353,7 @@ const PORTS = {
   growth:       { label:'Growth',       levels:[7,8,9,10,11], returns:{7:7.9,8:8.3,9:8.9,10:9.5,11:11.0}, def:9 }
 };
 const SCENARIOS = {
-  base:       { name:'Base Case', color:'#13ec13', desc:'Current inputs as entered' },
+  base:       { name:'Base Case', color:'#EBAA82', desc:'Current inputs as entered' },
   crash:      { name:'Market Crash (\u221225%)', color:'#ef4444', desc:'25% drop in year one, then normal' },
   aggressive: { name:'Aggressive Growth', color:'#3b82f6', desc:'Growth portfolio, Risk 10' },
   legacy:     { name:'Legacy Planning', color:'#a855f7', desc:'25% lower spending to preserve estate' }
@@ -554,18 +554,18 @@ function simulate(inp) {
 // ============================================================
 function renderKPIs(r) {
   const surplus = r.income.total - r.spend;
-  const lc = r.fundsTo>=90?'#0a9e0a':r.fundsTo>=80?'#f59e0b':'#ef4444';
-  const rc = r.implRate<=4?'#0a9e0a':r.implRate<=5?'#f59e0b':'#ef4444';
+  const lc = r.fundsTo>=90?'#32302F':r.fundsTo>=80?'#f59e0b':'#ef4444';
+  const rc = r.implRate<=4?'#32302F':r.implRate<=5?'#f59e0b':'#ef4444';
   document.getElementById('kpiStrip').innerHTML = `
     <div class="kpi" onclick="openPanel('income')">
       <div class="kpi-top"><span class="kpi-label">Portfolio at Ret.</span><span class="kpi-badge">+${(r.ret*100).toFixed(1)}%</span></div>
-      <div class="kpi-val" style="color:#0a9e0a">${fmtM(r.portRet)}</div>
+      <div class="kpi-val" style="color:#32302F">${fmtM(r.portRet)}</div>
       <div class="kpi-sub">${r.portLabel}</div>
     </div>
     <div class="kpi" onclick="openPanel('income')">
       <div class="kpi-top"><span class="kpi-label">Monthly Income</span><span class="kpi-badge ${surplus<0?'red':''}">${surplus>=0?'Surplus':'Shortfall'}</span></div>
       <div class="kpi-val">${fmt(r.income.total)}</div>
-      <div class="kpi-sub">${surplus>=0?'+':''}<span style="color:${surplus>=0?'#0a9e0a':'#dc2626'};font-weight:700">${fmt(surplus)}/mo</span></div>
+      <div class="kpi-sub">${surplus>=0?'+':''}<span style="color:${surplus>=0?'#32302F':'#dc2626'};font-weight:700">${fmt(surplus)}/mo</span></div>
     </div>
     <div class="kpi" onclick="openPanel('longevity')">
       <div class="kpi-top"><span class="kpi-label">Funds Last Until</span><span class="kpi-badge gray">Projection</span></div>
@@ -574,7 +574,7 @@ function renderKPIs(r) {
     </div>
     <div class="kpi" onclick="openPanel('fee')">
       <div class="kpi-top"><span class="kpi-label">Fee Savings</span><span class="kpi-badge">${r.fees.annSav>0?'Saves':'Even'}</span></div>
-      <div class="kpi-val" style="color:#0a9e0a">${r.fees.annSav>0?fmt(r.fees.annSav)+'/yr':'\u2014'}</div>
+      <div class="kpi-val" style="color:#32302F">${r.fees.annSav>0?fmt(r.fees.annSav)+'/yr':'\u2014'}</div>
       <div class="kpi-sub">${r.fees.annSav>0?'Lifetime: '+fmtM(r.fees.lifeSav):'Value is in planning & tax'}</div>
     </div>
     <div class="kpi" onclick="openPanel('rate')">
@@ -595,14 +595,14 @@ function renderLifecycle(r) {
   const retData = r.lcLabels.map((a,i) => a>=r.retAge ? r.lcVals[i] : null);
 
   document.getElementById('chartLegend').innerHTML = `
-    <div class="legend-i"><div class="legend-dot" style="background:#13ec13"></div>Accumulation</div>
+    <div class="legend-i"><div class="legend-dot" style="background:#EBAA82"></div>Accumulation</div>
     <div class="legend-i"><div class="legend-dot" style="background:#22c55e80"></div>Retirement</div>`;
 
   if(charts.lifecycle) charts.lifecycle.destroy();
   charts.lifecycle = new Chart(document.getElementById('lifecycleChart').getContext('2d'), {
     type:'line',
     data:{labels:r.lcLabels, datasets:[
-      {label:'Accumulation', data:accumData, borderColor:'#13ec13', backgroundColor:'rgba(19,236,19,.08)', fill:true, tension:.35, pointRadius:0, borderWidth:2.5},
+      {label:'Accumulation', data:accumData, borderColor:'#EBAA82', backgroundColor:'rgba(235,170,130,.08)', fill:true, tension:.35, pointRadius:0, borderWidth:2.5},
       {label:'Retirement', data:retData, borderColor:'#22c55e', backgroundColor:'rgba(34,197,94,.05)', fill:true, tension:.35, pointRadius:0, borderWidth:2, borderDash:[5,3]}
     ]},
     options:{responsive:true, interaction:{mode:'index',intersect:false},
@@ -713,18 +713,18 @@ const PANELS = {
     return {title:'Income Breakdown', html:`
       <div class="p-stat"><div class="p-stat-label">Monthly Goal</div><div class="p-stat-value">${fmt(r.spend)}/mo</div></div>
       <hr class="p-divider">
-      <div class="p-row"><span style="color:var(--muted)">Portfolio Withdrawals (${r.implRate.toFixed(1)}% rate)</span><span class="p-row-val" style="color:#0a9e0a">${fmt(r.income.drawdown)}/mo</span></div>
+      <div class="p-row"><span style="color:var(--muted)">Portfolio Withdrawals (${r.implRate.toFixed(1)}% rate)</span><span class="p-row-val" style="color:#32302F">${fmt(r.income.drawdown)}/mo</span></div>
       <div class="p-row"><span style="color:var(--muted)">CPP ${cppNote}${cppDef}</span><span class="p-row-val">${fmt(r.income.cpp)}/mo</span></div>
       <div class="p-row"><span style="color:var(--muted)">OAS ${oasNote}${oasDef}</span><span class="p-row-val">${fmt(r.income.oas)}/mo</span></div>
       <hr class="p-divider">
-      <div class="p-row"><span style="font-weight:700">Total Income</span><span class="p-row-val" style="color:#0a9e0a;font-size:16px">${fmt(r.income.total)}/mo</span></div>
-      <div class="p-row"><span>Surplus / Shortfall</span><span class="p-row-val" style="color:${r.income.total>=r.spend?'#0a9e0a':'#dc2626'}">${r.income.total>=r.spend?'+':''}${fmt(r.income.total-r.spend)}/mo</span></div>
+      <div class="p-row"><span style="font-weight:700">Total Income</span><span class="p-row-val" style="color:#32302F;font-size:16px">${fmt(r.income.total)}/mo</span></div>
+      <div class="p-row"><span>Surplus / Shortfall</span><span class="p-row-val" style="color:${r.income.total>=r.spend?'#32302F':'#dc2626'}">${r.income.total>=r.spend?'+':''}${fmt(r.income.total-r.spend)}/mo</span></div>
       ${r.retAge<r.cpp?'<div class="p-warn">CPP doesn\'t start until age '+r.cpp+'. For the first '+(r.cpp-r.retAge)+' years, all income comes from portfolio withdrawals and OAS'+(r.retAge>=r.oas?'':' (when it starts)')+'.</div>':''}
       <div class="p-tip">CPP grows 8.4%/yr for each year delayed past 65 \u2014 guaranteed and risk-free. At 70 it\'s ${fmt(calcCPP(r.yw,70))}/mo vs ${fmt(calcCPP(r.yw,60))}/mo at 60.</div>`};
   },
 
   longevity(r) {
-    const lc = r.fundsTo>=90?'#0a9e0a':r.fundsTo>=80?'#f59e0b':'#ef4444';
+    const lc = r.fundsTo>=90?'#32302F':r.fundsTo>=80?'#f59e0b':'#ef4444';
     return {title:'Longevity Projection', html:`
       <div class="p-stat"><div class="p-stat-label">Funds Last Until</div><div class="p-stat-value" style="color:${lc}">${r.fundsTo>=95?'Age 95+':'Age '+r.fundsTo}</div><div class="p-stat-note">~${r.retYears} years of retirement income</div></div>
       <hr class="p-divider">
@@ -739,7 +739,7 @@ const PANELS = {
   },
 
   rate(r) {
-    const rc = r.implRate<=4?'#0a9e0a':r.implRate<=5?'#f59e0b':'#ef4444';
+    const rc = r.implRate<=4?'#32302F':r.implRate<=5?'#f59e0b':'#ef4444';
     return {title:'Withdrawal Rate', html:`
       <div class="p-stat"><div class="p-stat-label">Implied Withdrawal Rate</div><div class="p-stat-value" style="color:${rc}">${r.implRate.toFixed(1)}%</div><div class="p-stat-note">of retirement portfolio per year</div></div>
       <hr class="p-divider">
@@ -750,7 +750,7 @@ const PANELS = {
       <div class="p-row"><span>Portfolio at retirement</span><span class="p-row-val">${fmtM(r.portRet)}</span></div>
       <hr class="p-divider">
       <div class="p-stat-label" style="margin-bottom:8px">Guidelines</div>
-      <div class="p-row"><span style="color:#0a9e0a">\u2264 4% Sustainable</span><span class="p-row-val">High confidence of lasting 30+ years</span></div>
+      <div class="p-row"><span style="color:#32302F">\u2264 4% Sustainable</span><span class="p-row-val">High confidence of lasting 30+ years</span></div>
       <div class="p-row"><span style="color:#f59e0b">4\u20135% Elevated</span><span class="p-row-val">May need adjustments if markets dip</span></div>
       <div class="p-row"><span style="color:#ef4444">> 5% High Risk</span><span class="p-row-val">Significant depletion risk</span></div>
       ${r.implRate>4?'<div class="p-warn">To reach 4%, you\'d need to reduce monthly spending by ~'+fmt(Math.round(r.income.drawdown-(r.portRet*.04/12)))+'/mo or grow your portfolio by ~'+fmtM(Math.round(r.income.drawdown*12/.04-r.portRet))+'.</div>':''}`};
@@ -776,7 +776,7 @@ const PANELS = {
         data:{labels, datasets:[
           {label:'Start at 60', data:be.curves[0].map(p=>p.cum), borderColor:'#ef4444', backgroundColor:'transparent', tension:.3, pointRadius:0, borderWidth:2},
           {label:'Start at 65', data:be.curves[1].map(p=>p.cum), borderColor:'#f59e0b', backgroundColor:'transparent', tension:.3, pointRadius:0, borderWidth:2},
-          {label:'Start at 70', data:be.curves[2].map(p=>p.cum), borderColor:'#13ec13', backgroundColor:'transparent', tension:.3, pointRadius:0, borderWidth:2}
+          {label:'Start at 70', data:be.curves[2].map(p=>p.cum), borderColor:'#EBAA82', backgroundColor:'transparent', tension:.3, pointRadius:0, borderWidth:2}
         ]},
         options:{responsive:true, interaction:{mode:'index',intersect:false},
           plugins:{legend:{position:'bottom',labels:{color:'#64748b',font:{size:10},padding:12}}, tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fmtM(c.raw)}}},
@@ -791,9 +791,9 @@ const PANELS = {
       <hr class="p-divider">
       <div class="p-compare">
         <div class="p-box"><div class="p-box-label">Do Nothing</div><div class="p-box-val" style="color:#dc2626">${fmtM(tb.balA)}</div><div class="p-box-note">RRSP at 90 \u2014 tax: ~${fmtM(tb.taxA)}</div></div>
-        <div class="p-box highlight"><div class="p-box-label">Strategic Drawdown</div><div class="p-box-val" style="color:#0a9e0a">${fmtM(tb.balB)}</div><div class="p-box-note">RRSP at 90 \u2014 tax: ~${fmtM(tb.taxB)}</div></div>
+        <div class="p-box highlight"><div class="p-box-label">Strategic Drawdown</div><div class="p-box-val" style="color:#32302F">${fmtM(tb.balB)}</div><div class="p-box-note">RRSP at 90 \u2014 tax: ~${fmtM(tb.taxB)}</div></div>
       </div>
-      <div style="text-align:center;padding:14px 0;font-size:18px;font-weight:700;color:#0a9e0a">Tax saved: ~${fmtM(tb.saved)}</div>
+      <div style="text-align:center;padding:14px 0;font-size:18px;font-weight:700;color:#32302F">Tax saved: ~${fmtM(tb.saved)}</div>
       <canvas id="chart-rrsp" style="max-height:180px"></canvas>
       <hr class="p-divider">
       <div class="p-stat-label" style="margin-bottom:6px">Strategy</div>
@@ -841,14 +841,14 @@ const PANELS = {
       <div class="p-stat-label" style="margin-bottom:6px">Account Balances at Retirement</div>
       <div class="p-row"><span style="color:#f59e0b">\u25cf Non-Registered</span><span class="p-row-val">${fmtM(r.retAccts.nonreg)}</span></div>
       <div class="p-row"><span style="color:#3b82f6">\u25cf RRSP / RRIF</span><span class="p-row-val">${fmtM(r.retAccts.rrsp)}</span></div>
-      <div class="p-row"><span style="color:#13ec13">\u25cf TFSA</span><span class="p-row-val">${fmtM(r.retAccts.tfsa)}</span></div>
+      <div class="p-row"><span style="color:#EBAA82">\u25cf TFSA</span><span class="p-row-val">${fmtM(r.retAccts.tfsa)}</span></div>
       <div class="p-tip">After age 71, RRIF has mandatory minimum withdrawals that increase each year. By drawing RRSP strategically before 71, you control the timing and tax impact.</div>`,
       charts:[{id:'chart-seq', config:{
         type:'line',
         data:{labels, datasets:[
           {label:'Non-Registered', data:data.map(d=>d.nonreg), fill:true, backgroundColor:'rgba(245,158,11,.15)', borderColor:'#f59e0b', tension:.3, pointRadius:0, borderWidth:2},
           {label:'RRSP/RRIF', data:data.map(d=>d.rrsp), fill:true, backgroundColor:'rgba(59,130,246,.12)', borderColor:'#3b82f6', tension:.3, pointRadius:0, borderWidth:2},
-          {label:'TFSA', data:data.map(d=>d.tfsa), fill:true, backgroundColor:'rgba(19,236,19,.1)', borderColor:'#13ec13', tension:.3, pointRadius:0, borderWidth:2}
+          {label:'TFSA', data:data.map(d=>d.tfsa), fill:true, backgroundColor:'rgba(235,170,130,.1)', borderColor:'#EBAA82', tension:.3, pointRadius:0, borderWidth:2}
         ]},
         options:{responsive:true, interaction:{mode:'index',intersect:false},
           plugins:{legend:{position:'bottom',labels:{color:'#64748b',font:{size:10},padding:12}}, tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fmtM(c.raw)}}},
@@ -864,10 +864,10 @@ const PANELS = {
       <div class="p-compare">
         <div class="p-box"><div class="p-box-label">Current Cost</div><div class="p-box-val" style="color:#dc2626">${fmtPct(f.curFee*100)}/yr</div>
           <div class="p-box-note">MER ${fmtPct(f.curMER)} + Adv ${fmtPct(f.curAdv)}</div><div class="p-box-note" style="font-weight:700;margin-top:4px">${fmt(f.annCur)}/yr</div></div>
-        <div class="p-box highlight"><div class="p-box-label">Wealthsimple</div><div class="p-box-val" style="color:#0a9e0a">${fmtPct(f.wsFee*100)}/yr</div>
-          <div class="p-box-note">ETF 0.16% + Adv ${fmtPct(f.wsAdv)}</div><div class="p-box-note" style="font-weight:700;margin-top:4px;color:#0a9e0a">${fmt(f.annWS)}/yr</div></div>
+        <div class="p-box highlight"><div class="p-box-label">Wealthsimple</div><div class="p-box-val" style="color:#32302F">${fmtPct(f.wsFee*100)}/yr</div>
+          <div class="p-box-note">ETF 0.16% + Adv ${fmtPct(f.wsAdv)}</div><div class="p-box-note" style="font-weight:700;margin-top:4px;color:#32302F">${fmt(f.annWS)}/yr</div></div>
       </div>
-      ${f.annSav>0?`<div style="text-align:center;padding:12px 0;font-size:16px;font-weight:700;color:#0a9e0a">Saves ${fmt(f.annSav)}/yr \u00b7 ${fmtM(f.lifeSav)} lifetime</div>`:'<div style="text-align:center;padding:12px 0;font-size:13px;color:var(--muted)">Fees comparable \u2014 value is in planning, tax strategy, and time.</div>'}
+      ${f.annSav>0?`<div style="text-align:center;padding:12px 0;font-size:16px;font-weight:700;color:#32302F">Saves ${fmt(f.annSav)}/yr \u00b7 ${fmtM(f.lifeSav)} lifetime</div>`:'<div style="text-align:center;padding:12px 0;font-size:13px;color:var(--muted)">Fees comparable \u2014 value is in planning, tax strategy, and time.</div>'}
       <canvas id="chart-fee" style="max-height:180px"></canvas>
       <hr class="p-divider">
       <div class="p-tip"><strong>Fee deductibility:</strong> Advisory fees are tax-deductible in non-registered and corporate accounts, further reducing the effective cost.</div>
@@ -876,7 +876,7 @@ const PANELS = {
         type:'line',
         data:{labels:fLabels, datasets:[
           {label:'Current Fees', data:fg.cur, borderColor:'#ef4444', backgroundColor:'rgba(239,68,68,.06)', fill:true, tension:.3, pointRadius:0, borderWidth:2},
-          {label:'Wealthsimple', data:fg.ws, borderColor:'#13ec13', backgroundColor:'rgba(19,236,19,.06)', fill:true, tension:.3, pointRadius:0, borderWidth:2}
+          {label:'Wealthsimple', data:fg.ws, borderColor:'#EBAA82', backgroundColor:'rgba(235,170,130,.06)', fill:true, tension:.3, pointRadius:0, borderWidth:2}
         ]},
         options:{responsive:true, interaction:{mode:'index',intersect:false},
           plugins:{legend:{position:'bottom',labels:{color:'#64748b',font:{size:10}}}, tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+fmtM(c.raw)}}},
